@@ -3,7 +3,7 @@ import { InventoryContext } from "../contexts/InventoryContext";
 
 function InventoryTable({ setToggleEditInventory }) {
 
-    const { InventoryList, fetchInventory, deleteInventory } = useContext(InventoryContext)
+    const { InventoryList, fetchInventory, deleteInventory, loading } = useContext(InventoryContext)
 
 
     return (
@@ -86,9 +86,10 @@ function InventoryTable({ setToggleEditInventory }) {
 
                 </tbody>
             </table>
+	        {loading && <p className="text-center mt-20">Loading!</p>}
 
             {
-                (!InventoryList || InventoryList?.length === 0) && <p className="text-center mt-20">No items found!</p>
+                !loading && (!InventoryList || InventoryList?.length === 0) && <p className="text-center mt-20">No items found!</p>
             }
         </div>
 
