@@ -53,6 +53,10 @@ jobs:
           task-definition: task-definition.json
           container-name: ${{ secrets.WEB_CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
+          
+      - name: Debug rendered task definition
+        run: |
+          echo "${{ steps.task-def.outputs.task-definition }}" | jq '.containerDefinitions[0].portMappings'          
 
       - name: Deploy the updated ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
