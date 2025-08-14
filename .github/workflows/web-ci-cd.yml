@@ -37,6 +37,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/${{ secrets.ECR_WEB_REPOSITORY }}:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/${{ secrets.ECR_WEB_REPOSITORY }}:$IMAGE_TAG web-tier
           docker push $ECR_REGISTRY/${{ secrets.ECR_WEB_REPOSITORY }}:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/${{ secrets.ECR_WEB_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
