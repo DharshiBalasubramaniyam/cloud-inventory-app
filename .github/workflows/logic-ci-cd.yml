@@ -42,3 +42,23 @@ jobs:
           docker build -t $ECR_REGISTRY/${{ secrets.ECR_LOGIC_REPOSITORY }}:$IMAGE_TAG logic-tier
           docker push $ECR_REGISTRY/${{ secrets.ECR_LOGIC_REPOSITORY }}:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/${{ secrets.ECR_LOGIC_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ secrets.LOGIC_TASK_DEFINITION_FAMILTY }} --query taskDefinition > task-definition.json
+
+      - name: Update ECS task definition with new image 
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ secrets.LOGIC_CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy the updated ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.LOGIC_ECS_SERVICE }}
+          cluster: ${{ secrets.LOGIC_ECS_CLUSTER }}
+          wait-for-service-stability: true
