@@ -7,7 +7,8 @@ function InventoryTable({ setToggleEditInventory }) {
 
 
     return (
-        <div class="relative overflow-x-auto mx-20 my-10">
+        <div class="relative overflow-x-auto mx-10 my-10">
+			{loading && <p className="text-left mt-15 mb-15">Loading...</p>}
             <table class="w-full text-sm text-left rtl:text-right text-blue-500">
                 <thead class="text-xs text-white uppercase bg-blue-50 dark:bg-blue-700">
                     <tr>
@@ -86,7 +87,6 @@ function InventoryTable({ setToggleEditInventory }) {
 
                 </tbody>
             </table>
-	        {loading && <p className="text-center mt-20">Loading!</p>}
 
             {
                 !loading && (!InventoryList || InventoryList?.length === 0) && <p className="text-center mt-20">No items found!</p>
