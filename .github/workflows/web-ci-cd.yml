@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'web-tier/**'
+      - '.github/workflows/web-ci-cd.yml'
 
 jobs:
   build-and-deploy:
