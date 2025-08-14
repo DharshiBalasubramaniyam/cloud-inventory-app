@@ -1,9 +1,11 @@
-name: CI/CD Pipeline for Web tier
+name: CI/CD Pipeline for Logic tier
 
 on: 
   push:
     branches:
       - main
+    paths:
+      - 'logic-tier/**'
 
 jobs:
   build-and-deploy:
