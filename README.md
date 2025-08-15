@@ -4,7 +4,7 @@ A production-grade inventory management application designed with a modern, scal
 
 ## Tech Stack
 
-<img width="4237" height="1846" alt="image" src="https://github.com/user-attachments/assets/239f31ec-b50e-4b94-bb65-efe1fa46535b" />
+<img width="4237" height="1846" alt="image" src="https://github.com/user-attachments/assets/ec126c62-9061-4112-bdf2-dac596e55c12" />
 
 - 💻 [Web-tier](#web-tier):
   - **React.js** with Vite for blazing-fast development and optimized builds.
