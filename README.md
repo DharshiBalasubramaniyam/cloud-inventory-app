@@ -4,7 +4,8 @@ A production-grade inventory management application designed with a modern, scal
 
 ## Tech Stack
 
-<img width="4237" height="1846" alt="image" src="https://github.com/user-attachments/assets/ec126c62-9061-4112-bdf2-dac596e55c12" />
+<img width="8475" height="3692" alt="image" src="https://github.com/user-attachments/assets/b6936782-70f8-4a54-959a-4545676b065d" />
+
 
 - 💻 [Web-tier](#web-tier):
   - **React.js** with Vite for blazing-fast development and optimized builds.
@@ -536,4 +537,10 @@ Now we are all done. Trigger the workflows by pushing the code to github reposit
 ### Demo
 
 https://github.com/user-attachments/assets/39afc3d9-6566-4b9f-a203-7f873e2334f9
+
+## References
+
+- [Configure a virtual private cloud](https://docs.aws.amazon.com/vpc/latest/userguide/configure-your-vpc.html)
+- [Using Amazon ECR images with Amazon ECS](https://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_on_ECS.html)
+- [Amazon ECS "Deploy Task Definition" Action for GitHub Actions](https://github.com/marketplace/actions/amazon-ecs-deploy-task-definition-action-for-github-actions)
 
