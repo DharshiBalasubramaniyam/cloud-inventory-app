@@ -4,6 +4,8 @@ A production-grade inventory management application designed with a modern, scal
 
 ## Tech Stack
 
+<img width="4237" height="1846" alt="image" src="https://github.com/user-attachments/assets/239f31ec-b50e-4b94-bb65-efe1fa46535b" />
+
 - 💻 [Web-tier](#web-tier):
   - **React.js** with Vite for blazing-fast development and optimized builds.
 - ⚙️ [Logic-tier](#logic-tier):
@@ -112,8 +114,6 @@ CMD ["java", "-jar", "app.jar"]
 
 ## Container Registry (ECR)
 
-<img width="1919" height="807" alt="image" src="https://github.com/user-attachments/assets/c7eb7842-b59a-49c3-9801-0544eb1945cf" />
-
 - The project uses Amazon Elastic Container Registry (ECR) as the secure, fully managed container image repository for storing application images, which integrate well with AWS ECS.
 
 | Configuration | Web tier | Logic tier | 
@@ -126,7 +126,7 @@ CMD ["java", "-jar", "app.jar"]
 
 ## Networking
 
-<img width="1919" height="805" alt="image" src="https://github.com/user-attachments/assets/b6e270f5-1a8a-4473-a528-1a12a02c26dd" />
+<img width="2283" height="1352" alt="image" src="https://github.com/user-attachments/assets/248d4395-9199-4f02-ae4d-2711c838eb7e" />
 
 ### VPC
 
@@ -335,7 +335,17 @@ Security group for logic-tier ECS service: `inventory-logic-sg`
 | Listener | `http`, `80` | `http`, `80` |
 | Target group | `inventory-web-tg` | `inventory-logic-tg` |
 
+- Now our React application should send to api requests to `inventory-logic-alb`. 
+- Select `inventory-logic-alb` and copy the DNS name. 
+- Update `API_BASE_URL` in [`ApiConfig.tsx`](web-tier/src/api-service/ApiConfig.jsx) as below.
+
+```
+export const API_BASE_URL = "http://YOUR_ALB_DNS_NAME";
+```
+
 ## Deployment
+
+<img width="4750" height="2321" alt="image" src="https://github.com/user-attachments/assets/86df9bc3-2df4-4983-bcd9-87b3453696e8" />
 
 - Both the web-tier and the logic tier are deployed to  **AWS ECS (Fargate)**, which is a fully managed container orchestration service provided by Amazon Web Services (AWS).
   
@@ -408,8 +418,10 @@ ECS services set-up:
 
 ## CI-CD with GitHub Actions
 
-- Automated build, test, Dockerization, and deployment to AWS using GitHub Actions. Every push to the main branch triggers the CI=CD pipeline.
-- To access the AWS ECS service from GitHub Actions, we need to create an IAM user within our account and provide that user's credentials to GitHub Actions. So that GH has access to AWS services.
+<img width="7421" height="2480" alt="image" src="https://github.com/user-attachments/assets/79b01658-1e38-4b06-9f11-6fd8fc2bd45e" />
+
+- Automated build, Dockerization, and deployment to AWS using GitHub Actions. Every push to the main branch triggers the CI/CD pipeline.
+- To access the AWS ECS service from GitHub Actions, we need to create an IAM user within our account and provide that user's credentials to GitHub Actions so that GH has access to AWS services.
 
 ### IAM user for GitHub Actions   
 
@@ -472,16 +484,16 @@ ECS services set-up:
 | AWS_ACCESS_KEY_ID | access key of IAM user `inventory-ga-user`  |  
 | AWS_SECRET_ACCESS_KEY | secret access key of IAM user `inventory-ga-user` | 
 | AWS_REGION | `us-east-1` | 
-| ECR_LOGIC_REPOSITORY | `` | 
-| ECR_WEB_REPOSITORY | `` | 
-| LOGIC_CONTAINER_NAME | `` | 
-| LOGIC_ECS_CLUSTER | `` | 
-| LOGIC_ECS_SERVICE | `` | 
-| LOGIC_TASK_DEFINITION_FAMILTY | `` | 
-| WEB_CONTAINER_NAME | `` | 
-| WEB_ECS_CLUSTER | `` | 
-| WEB_ECS_SERVICE | `` | 
-| WEBTASK_DEFINITION_FAMILTY | `` | 
+| ECR_LOGIC_REPOSITORY | `inventory-logic-tier-registry` | 
+| ECR_WEB_REPOSITORY | `inventory-web-tier-registry` | 
+| LOGIC_CONTAINER_NAME | `inventory-logic-container` | 
+| LOGIC_ECS_CLUSTER | `inventory-cluster` | 
+| LOGIC_ECS_SERVICE | `inventory-logic-service` | 
+| LOGIC_TASK_DEFINITION_FAMILTY | `inventory-logic-task-definition` | 
+| WEB_CONTAINER_NAME | `inventory-web-container` | 
+| WEB_ECS_CLUSTER | `inventory-cluster` | 
+| WEB_ECS_SERVICE | `inventory-web-service` | 
+| WEB_TASK_DEFINITION_FAMILTY | `inventory-web-task-definition` | 
 
 ### Workflows
 
@@ -489,11 +501,39 @@ ECS services set-up:
   - [`web-ci-cd.yml`](.github/workflows/web-ci-cd.yml) - Builds and deploys the web tier when changes are detected in the `/web-tier` directory.
   - [`logic-ci-cd.yml`](.github/workflows/logic-ci-cd.yml) - Builds and deploys the logic tier when changes are detected in the `/logic-tier` directory.
 - Each workflow involves
-  - Setting up the environment
+  - Setting up the environment.
   - Build and test the application on code push.
-  - Authenticate with AWS
+  - Authenticate with AWS.
   - Package the application as a Docker image and push to Amazon ECR.
   - Update ECS task definition with new image.
   - Deploy updated task definition to ECS.
 
-   
+Now we are all done. Trigger the workflows by pushing the code to github repository.
+
+## Screenshots from AWS console
+
+### ECR console
+<img width="1919" height="877" alt="inventory-ecr-registries" src="https://github.com/user-attachments/assets/4f1e3428-0740-4ac4-be36-fb7ae9aabb91" />
+
+### VPC resource map
+<img width="1846" height="492" alt="vpc-resource-map" src="https://github.com/user-attachments/assets/57f27cb8-4750-4c98-a21c-8180b5ad8ce3" />
+
+### Security Groups
+<img width="1919" height="865" alt="inventory_sgs" src="https://github.com/user-attachments/assets/98142cc2-c1b1-41a9-9fe9-943871ba4381" />
+
+### Web ECS service - health
+<img width="1919" height="864" alt="inventory-web-service-health" src="https://github.com/user-attachments/assets/aeff7c71-a0da-416c-b198-5e28054f0b9f" />
+
+### Web ECS service - tasks
+<img width="1918" height="868" alt="inventory-web-service-tasks" src="https://github.com/user-attachments/assets/280d9911-cc9a-4bab-a721-9d98c51880c9" />
+
+### Logic ECS service - health
+<img width="1914" height="866" alt="inventory-logic-service-health" src="https://github.com/user-attachments/assets/b2f314f9-f09d-454d-bf8f-b5296d3687df" />
+
+### Logic ECS service - tasks
+<img width="1919" height="865" alt="inventory-logic-service-tasks" src="https://github.com/user-attachments/assets/2eb2633b-c9dd-487d-962f-74f9696d975c" />
+
+### Demo
+
+https://github.com/user-attachments/assets/39afc3d9-6566-4b9f-a203-7f873e2334f9
+
